@@ -53,10 +53,10 @@ namespace PixelFlow
             {
                 if (MainWindow.Instance.GetCurrentFrameIndex() < 0)
                 {
-                    List<Bitmap> bitmaps = Utilities.BitmapConverters.CreateBitmapsFromGIF(stream);
+                    List<Bitmap> bitmaps = Utilities.BitmapConverters.CreateBitmapsFromGIF(fileBox.Text);
 
                     for (int i = 0; i < bitmaps.Count; i++)
-                    {
+                    { 
                         int index = MainWindow.Instance.AddNewFrame();
                         MainWindow.Instance.GetAnimationPane().GetFramePreview().AddNewPreview(index);
                         MainWindow.Instance.GetDrawPane().ImportGifFrame(bitmaps[i], MainWindow.Instance.GetOptionsBar().GetCurrentScale(), (int)nativeScaleSelect.Value);

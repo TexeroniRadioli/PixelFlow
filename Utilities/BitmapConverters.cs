@@ -66,23 +66,15 @@ namespace Utilities
         }
 
         // Creates a List of Bitmaps from an input gif file
-        public static List<Bitmap> CreateBitmapsFromGIF(Stream gifStream)
+        public static List<Bitmap> CreateBitmapsFromGIF(string gifFileName)
         {
-            try
-            {
-                List<Bitmap> toReturn = new List<Bitmap>();
+            MagickImageCollection images = new MagickImageCollection(gifFileName);
+            List<Bitmap> bmpList = new List<Bitmap>();
+            
+            for (int i = 0; i < images.Count; i++)
+                bmpList.Add(images[i].ToBitmap(ImageFormat.Gif));
 
-                GifBitmapDecoder gifDec = new GifBitmapDecoder(gifStream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);
-                foreach (BitmapFrame bf in gifDec.Frames)
-                    toReturn.Add(CreateBitmapFromFrame(bf));
-
-                return toReturn;
-            }
-            catch (FileFormatException ex)
-            {
-                Console.WriteLine(ex.Message);
-                return null;
-            }
+            return bmpList;
         }
 
         // Saves a Bitmap as a png file
@@ -93,16 +85,6 @@ namespace Utilities
             pngEnc.Frames.Add(BitmapFrame.Create(source));
             
             pngEnc.Save(pngStream);
-        }
-
-        // Saves a list of Bitmaps as a gif file
-        public static void SaveBitmapsAsGIF(List<Bitmap> bitmaps, Stream gifStream)
-        {
-            GifBitmapEncoder gifEnc = new GifBitmapEncoder();
-            foreach (Bitmap bmp in bitmaps)
-                gifEnc.Frames.Add(BitmapFrame.Create(CreateSourceFromBitmap(bmp)));
-            
-            gifEnc.Save(gifStream);
         }
 
         // Saves a list of Bitmaps as an animated gif file
